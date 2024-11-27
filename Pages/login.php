@@ -1,27 +1,3 @@
-<?php
-session_start();
-
-// Dummy credentials
-$validEmail = "user@gmail.com";
-$validPassword = "password123";
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $email = $_POST['inputEmail'];
-    $password = $_POST['inputPassword'];
-
-    if ($email === $validEmail && $password === $validPassword) {
-        $_SESSION['loggedin'] = true;
-        $_SESSION['email'] = $email;
-
-        // Redirect to home page
-        header("Location: ../main.php");
-        exit();
-    } else {
-        $errorMessage = "Invalid email or password.";
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -59,3 +35,41 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </section>
 </body>
 </html>
+
+
+
+<?php
+session_start();
+
+// Error message variable
+$errorMessage = "";
+
+// Check if form is submitted
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Sanitize inputs
+    $email = filter_var($_POST['inputEmail'], FILTER_SANITIZE_EMAIL);
+    $password = $_POST['inputPassword'];
+
+    // Validate email format
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errorMessage = "Invalid email format.";
+    } elseif (strlen($password) < 8) {
+        $errorMessage = "Password must be at least 8 characters long.";
+    } else {
+        // Simulated database validation (replace with actual DB check)
+        $validEmail = "user@example.com";
+        $validPasswordHash = password_hash("password123", PASSWORD_DEFAULT);
+
+        if ($email === $validEmail && password_verify($password, $validPasswordHash)) {
+            // Successful login
+            $_SESSION['logged_in'] = true;
+            $_SESSION['user_email'] = $email;
+            header("Location: ../main.php"); // Redirect to main page
+            exit;
+        } else {
+            $errorMessage = "Invalid email or password.";
+        }
+    }
+}
+?>
+

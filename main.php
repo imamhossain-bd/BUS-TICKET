@@ -1,12 +1,4 @@
-<?php
-session_start();
-
-if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
-    header("Location: Pages/login.php");
-    exit();
-}
-?>
-
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -20,10 +12,10 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
 <body>
     <header>
         <section>
-            <div id="navbar" class="w-full h-28 px-10 py-5 bg-slate-200">
+            <div id="navbar" class="w-full h-28 px-12 py-5">
                 <div class="flex justify-between h-20 py-5">
                     <div id="logo">
-                        <h2 class="text-2xl font-bold">P-TICKET</h2>
+                        <h2 class="text-2xl font-bold"><a href="">P-TICKET</a></h2>
                     </div>
                     <div id="menu" class="py-1 text-xl font-semibold">
                         <ul class="flex gap-10">
@@ -33,16 +25,42 @@ if (!isset($_SESSION['loggedin']) || $_SESSION['loggedin'] !== true) {
                             <li><a href="#search">Search</a></li>
                         </ul>
                     </div>
-                    <div id="login_logout">
-                        <a href="logout.php" class="h-11 rounded-xl text-xl font-bold w-24 bg-red-700 text-white">Log Out</a>
-                    </div>
+                        <div id="login_logout">
+                            <?php if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true): ?>
+                                <!-- Log Out Button -->
+                                <button>
+                                    <a href="Pages/login.php" class="h-11 rounded-xl text-xl py-3 px-7 border-2 border-[#1DD100] font-bold w-24 bg-[#1DD100]/10 text-[#1DD100]">
+                                        Log Out
+                                    </a>
+                                </button>
+                            <?php else: ?>
+                                <!-- Log In Button -->
+                                <button>
+                                    <a href="Pages/login.php" class="h-11 rounded-xl text-xl py-3 px-7 border-2 border-[#1DD100] font-bold w-24 bg-[#1DD100]/10 text-[#1DD100]">
+                                        Log In
+                                    </a>
+                                </button>
+                            <?php endif;?>
+                        </div>
                 </div>
             </div>
         </section>
-    </header>
 
+        <section>
+            <div class="bg-[url('images/Rectangle3.png')] z-10 h-screen bg-cover bg-center">
+                
+            </div>
+        </section>
+    </header>
     <main>
-        <h1 class="text-center mt-10 text-3xl">Welcome, <?= htmlspecialchars($_SESSION['email']); ?>!</h1>
+        
     </main>
+
+<?php
+        if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+            header("Location: Pages/login.php");
+            exit;
+        }
+?>
 </body>
 </html>
